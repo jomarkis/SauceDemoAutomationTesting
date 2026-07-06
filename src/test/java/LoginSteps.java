@@ -21,7 +21,7 @@ public class LoginSteps {
     private LoginPage loginPage;
     private ProductsPage productsPage;
 
-    private WebDriver driver;
+    public static WebDriver driver;
 
     private long startTime;
     private long endTime;
@@ -74,5 +74,15 @@ public class LoginSteps {
         assertEquals(expTitle,titleText,"The login page must be \"Products\"");
         assertTrue(totalTime <= 2000, "The login process took longer than 2 seconds: " + totalTime + " milliseconds");
         driver.quit();
+    }
+
+    @Given("The user is logged in as a {string}")
+    public void userIsLoggedInAs(String userType) {
+        openWebsite();
+
+        loginPage.enterUsername(userType);
+        loginPage.enterPassword("secret_sauce");
+
+        clickLoginButton();
     }
 }
