@@ -157,4 +157,10 @@ public class ProductsSteps {
             }
     }
     }
+
+    // Navigation to details
+    @When("The user clicks on a product's name")
+    public void clickOnProductsName() {
+
+    }
 }

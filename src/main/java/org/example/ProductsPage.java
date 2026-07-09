@@ -15,6 +15,9 @@ public class ProductsPage {
     private By menuLogout = By.cssSelector("*[data-test=\"logout-sidebar-link\"]");
     private By menuResetAppState =By.cssSelector("*[data-test=\"reset-sidebar-link\"]");
 
+    private By detailsName = By.cssSelector("*[data-test=\"inventory-item-name\"]");
+    private By nameButton = By.cssSelector("#item_0_title_link > .inventory_item_name");
+
     // Menu Button Getters
 
     public By  getMenuButton() {
@@ -97,4 +100,8 @@ public class ProductsPage {
     public void clickMenuResetAppState() {
         driver.findElement(menuResetAppState).click();
     }
+
+    //
+
+    public void clickOnName()
 }

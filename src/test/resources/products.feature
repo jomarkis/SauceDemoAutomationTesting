@@ -18,3 +18,11 @@ Feature: Product Page Functionality
     Then The user should be logged out and redirected to the login page
     When The user clicks on "Reset App State"
     Then The cart should be empty and all buttons should be reset to "Add to cart"
+  Scenario: Navigation to a product's details page as standard_user
+    Given The user is logged in as a "standard_user"
+    When The user adds a product to the cart
+    And The user clicks on a product's name
+    Then The user should be redirected to the product's details page and the product's name, description, and price should be displayed
+    And The "Add to cart" button should be displayed if the product is not in the cart, or the "Remove" button should be displayed if the product is already in the cart
+    When The user clicks on the "Back to products" button
+    Then The user should be redirected back to the products page
