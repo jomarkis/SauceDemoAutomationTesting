@@ -24,5 +24,21 @@ Feature: Product Page Functionality
     And The user clicks on a product's name
     Then The user should be redirected to the product's details page and the product's name, description, and price should be displayed
     And The "Add to cart" button should be displayed if the product is not in the cart, or the "Remove" button should be displayed if the product is already in the cart
-    When The user clicks on the "Back to products" button
-    Then The user should be redirected back to the products page
+    When The user clicks on "Add to cart" or "Remove" Button in the details page
+    And The user clicks on the "Back to products" button
+    Then The user should be redirected to the products page
+    And The product's button should be updated to either "Add to cart" or "Remove" based on the previous action
+  Scenario: Use product sorting functionality as standard_user
+    Given The user is logged in as a "standard_user"
+    When The user clicks on the product sorting container
+    And The user clicks on option A-Z
+    Then The products should be sorted in ascending order by name
+    When The user clicks on the product sorting container
+    And The user clicks on option Z-A
+    Then The products should be sorted in descending order by name
+    When The user clicks on the product sorting container
+    And The user clicks on option Low-High
+    Then The products should be sorted in ascending order by price
+    When The user clicks on the product sorting container
+    And The user clicks on option High-Low
+    Then The products should be sorted in descending order by price

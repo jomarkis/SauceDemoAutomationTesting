@@ -10,7 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,8 +30,8 @@ public class ProductsSteps {
 
     @Then("The cart badge should show \"1\" and the button should change to \"Remove\"")
     public void cartIs1() {
-        assertEquals("1",productsPage.getCartBadgeText(),"The cart badge must be \"1\"");
-        assertEquals("Remove",productsPage.getRemoveButtonText("sauce-labs-backpack"),"The button must be \"Remove\"");
+        assertEquals("1", productsPage.getCartBadgeText(), "The cart badge must be \"1\"");
+        assertEquals("Remove", productsPage.getRemoveButtonText("sauce-labs-backpack"), "The button must be \"Remove\"");
     }
 
     @When("The user removes the product from the cart")
@@ -39,8 +41,8 @@ public class ProductsSteps {
 
     @Then("The cart badge should be empty and the button should change to \"Add to cart\"")
     public void cartIsEmpty() {
-        assertEquals("",productsPage.getCartBadgeText(),"The cart badge must be empty");
-        assertEquals("Add to cart",productsPage.getAddButtonText("sauce-labs-backpack"),"The button must be \"Add to cart\"");
+        assertEquals("", productsPage.getCartBadgeText(), "The cart badge must be empty");
+        assertEquals("Add to cart", productsPage.getAddButtonText("sauce-labs-backpack"), "The button must be \"Add to cart\"");
         if (driver != null) {
             driver.quit();
         }
@@ -89,7 +91,7 @@ public class ProductsSteps {
     @Then("The user should be redirected to the products page")
     public void checkProductsPage() {
         String title = productsPage.getTitleText();
-        assertEquals("Products",title,"The user must be redirected to the products page");
+        assertEquals("Products", title, "The user must be redirected to the products page");
     }
 
     @When("The user clicks on \"About\"")
@@ -144,23 +146,121 @@ public class ProductsSteps {
     public void checkResetAppStateFunctionality() {
 
         try {
-        assertEquals("",productsPage.getCartBadgeText(),"The cart badge must be empty");
-        ArrayList<String> products = new ArrayList<>(List.of("sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt", "sauce-labs-fleece-jacket", "sauce-labs-onesie", "test.allthethings()-t-shirt-(red)"));
-        for (String product : products) {
-            List<WebElement> elements = driver.findElements(productsPage.addButton(product));
-            assertTrue(elements.size() > 0);
-            assertEquals("Add to cart", productsPage.getAddButtonText(product), "The button must be \"Add to cart\"");
-        }
+            assertEquals("", productsPage.getCartBadgeText(), "The cart badge must be empty");
+            ArrayList<String> products = new ArrayList<>(List.of("sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt", "sauce-labs-fleece-jacket", "sauce-labs-onesie", "test.allthethings()-t-shirt-(red)"));
+            for (String product : products) {
+                List<WebElement> elements = driver.findElements(productsPage.addButton(product));
+                assertTrue(elements.size() > 0);
+                assertEquals("Add to cart", productsPage.getAddButtonText(product), "The button must be \"Add to cart\"");
+            }
         } finally {
             if (driver != null) {
                 driver.quit();
             }
-    }
+        }
     }
 
     // Navigation to details
     @When("The user clicks on a product's name")
     public void clickOnProductsName() {
-
+        productsPage.clickOnName("backpack");
     }
+
+    @Then("The user should be redirected to the product's details page and the product's name, description, and price should be displayed")
+    public void checkProductDetailPage() {
+        {
+            List<WebElement> elements = driver.findElements(By.cssSelector("*[data-test=\"inventory-item-name\"]"));
+            assertTrue(elements.size() > 0);
+        }
+        assertEquals("Sauce Labs Backpack", driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText(), "The product name must be \"Sauce Labs Backpack\"");
+        {
+            List<WebElement> elements = driver.findElements(By.cssSelector("*[data-test=\"inventory-item-desc\"]"));
+            assertTrue(elements.size() > 0);
+        }
+        assertEquals(driver.findElement(By.cssSelector("*[data-test=\"inventory-item-desc\"]")).getText(), productsPage.getProductDetails("backpack"));
+        {
+            List<WebElement> elements = driver.findElements(By.cssSelector("*[data-test=\"inventory-item-price\"]"));
+            assertTrue(elements.size() > 0);
+        }
+        assertEquals(driver.findElement(By.cssSelector("*[data-test=\"inventory-item-price\"]")).getText(), productsPage.getProductPrices("backpack"));
+    }
+
+    @Then("The \"Add to cart\" button should be displayed if the product is not in the cart, or the \"Remove\" button should be displayed if the product is already in the cart")
+    public void checkAddToCartButtonDetailsPage() {
+        {
+            List<WebElement> elements = driver.findElements(By.cssSelector("*[data-test=\"remove\"]"));
+            assertTrue(elements.size() > 0);
+        }
+        assertEquals("Remove", productsPage.getDetailsRemoveButtonText(), "The button must be \"Remove\"");
+    }
+
+    @When("The user clicks on \"Add to cart\" or \"Remove\" Button in the details page")
+    public void clickButtonDetailsPage() {
+        productsPage.clickDetailsRemoveButton();
+    }
+
+    @When("The user clicks on the \"Back to products\" button")
+    public void clickBackToProductsButton() {
+        driver.findElement(By.cssSelector("*[data-test=\"back-to-products\"]")).click();
+    }
+
+    @Then("The product's button should be updated to either \"Add to cart\" or \"Remove\" based on the previous action")
+    public void checkButtonUpdate() {
+        assertEquals("Add to cart", productsPage.getAddButtonText("sauce-labs-backpack"));
+    }
+
+    // Sorting
+
+    @When("The user clicks on the product sorting container")
+    public void clickOnProductSortingContainer() {
+        productsPage.clickOnSortingContainer();
+    }
+
+    @When("The user clicks on option A-Z")
+    public void clickOnOptionAZ() {
+        productsPage.clickOnSortingOption("A-Z");
+    }
+
+    @Then("The products should be sorted in ascending order by name")
+    public void checkSortingAZ() {
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Bike Light","0","Sauce Labs Bolt T-Shirt","1","Sauce Labs Onesie","2","Test.allTheThings() T-Shirt (Red)","3","Sauce Labs Fleece Jacket","5"));
+        assertEquals("Sauce Labs Backpack",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+        for (String key : namesmap.keySet()) {
+            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+        }
+    }
+
+    @When("The user clicks on option Z-A")
+    public void clickOnOptionZA() {
+        productsPage.clickOnSortingOption("Z-A");
+    }
+
+    @Then("The products should be sorted in descending order by name")
+    public void checkSortingDescending() {
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Onesie","0","Sauce Labs Fleece Jacket","1","Sauce Labs Bike Light","2","Sauce Labs Backpack","3","Sauce Labs Bolt T-Shirt","5"));
+        assertEquals("Test.allTheThings() T-Shirt (Red)",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+        for (String key : namesmap.keySet()) {
+            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+        }
+    }
+
+    @When("The user clicks on option Low-High")
+    public void clickOnOptionLowHigh() {
+        productsPage.clickOnSortingOption("Low-High");
+    }
+
+    @Then("The products should be sorted in ascending order by price")
+    public void checkSortingPriceAscending() {
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Bike Light","0","Sauce Labs Bolt T-Shirt","1","Sauce Labs Onesie","2","Test.allTheThings() T-Shirt (Red)","3","Sauce Labs Fleece Jacket","5"));
+        assertEquals("Sauce Labs Backpack",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+        for (String key : namesmap.keySet()) {
+            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+        }
+    }
+
+    @When("The user clicks on option High-Low")
+    public void clickOnOptionHighLow() {
+        productsPage.clickOnSortingOption("High-Low");
+    }
+
 }
