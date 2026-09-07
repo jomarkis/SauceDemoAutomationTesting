@@ -45,9 +45,6 @@ public class ProductsSteps {
     public void cartIsEmpty() {
         assertEquals("", productsPage.getCartBadgeText(), "The cart badge must be empty");
         assertEquals("Add to cart", productsPage.getAddButtonText("sauce-labs-backpack"), "The button must be \"Add to cart\"");
-        if (driver != null) {
-            driver.quit();
-        }
     }
 
     // Scenario: Use menu bar as standard_user
@@ -147,7 +144,7 @@ public class ProductsSteps {
     @Then("The cart should be empty and all buttons should be reset to \"Add to cart\"")
     public void checkResetAppStateFunctionality() {
 
-        try {
+
             assertEquals("", productsPage.getCartBadgeText(), "The cart badge must be empty");
             ArrayList<String> products = new ArrayList<>(List.of("sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt", "sauce-labs-fleece-jacket", "sauce-labs-onesie", "test.allthethings()-t-shirt-(red)"));
             for (String product : products) {
@@ -155,11 +152,6 @@ public class ProductsSteps {
                 assertTrue(elements.size() > 0);
                 assertEquals("Add to cart", productsPage.getAddButtonText(product), "The button must be \"Add to cart\"");
             }
-        } finally {
-            if (driver != null) {
-                driver.quit();
-            }
-        }
     }
 
     // Navigation to details
