@@ -28,9 +28,12 @@ public class LoginSteps {
 
     @Given("The user opens the SauceDemo website in Firefox")
     public void openWebsite() {
-        driver = new FirefoxDriver();
+        if (driver == null) {
+            driver = new FirefoxDriver();
+            driver.manage().window().setSize(new Dimension(1513, 831));
+        }
+        
         driver.get("https://www.saucedemo.com/");
-        driver.manage().window().setSize(new Dimension(1513, 831));
 
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
@@ -71,8 +74,8 @@ public class LoginSteps {
         long totalTime = endTime - startTime;
 
         String titleText = productsPage.getTitleText();
-        assertEquals(expTitle,titleText,"The login page must be \"Products\"");
-        assertTrue(totalTime <= 2000, "The login process took longer than 2 seconds: " + totalTime + " milliseconds");
+        assertEquals(expTitle,titleText,"Should be redirected to the products page with title: "+expTitle);
+        assertTrue(totalTime <= 2000, "The redirection process took longer than 2 seconds: " + totalTime + " milliseconds");
         driver.quit();
     }
 

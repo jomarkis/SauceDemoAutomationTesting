@@ -88,7 +88,7 @@ public class ProductsPage {
         return driver.findElement(addButton(product)).getText();
     }
 
-    private By removeButton(String product) {
+    public By removeButton(String product) {
         return By.cssSelector("*[data-test=\"remove-" + product + "\"]");
     }
 

@@ -1,12 +1,16 @@
-Feature: Product Page Functionality
-  Scenario: Add and Remove a product from cart as standard_user
-    Given The user is logged in as a "standard_user"
+Feature: Product Page Functionality for problem_user
+  Scenario: Add and Remove a product from cart as problem_user
+    Given The user is logged in as a "problem_user"
     When The user adds a product to the cart
     Then The cart badge should show "1" and the button should change to "Remove"
-    And The user removes the product from the cart
+    When The user removes the product from the cart
     Then The cart badge should be empty and the button should change to "Add to cart"
-  Scenario: Use menu bar as standard_user
-    Given The user is logged in as a "standard_user"
+  Scenario: Add every product to the cart as problem_user
+    Given The user is logged in as a "problem_user"
+    When The user adds every product to the cart
+    Then The cart badge should show "6" and all buttons should change to "Remove"
+  Scenario: Use menu bar as problem_user
+    Given The user is logged in as a "problem_user"
     When The user adds a product to the cart
     And The user clicks on the menu bar
     Then The menu should be displayed
@@ -18,8 +22,8 @@ Feature: Product Page Functionality
     Then The user should be logged out and redirected to the login page
     When The user clicks on "Reset App State"
     Then The cart should be empty and all buttons should be reset to "Add to cart"
-  Scenario: Navigation to a product's details page as standard_user
-    Given The user is logged in as a "standard_user"
+  Scenario: Navigation to a product's details page as problem_user
+    Given The user is logged in as a "problem_user"
     When The user adds a product to the cart
     And The user clicks on a product's name
     Then The user should be redirected to the product's details page and the product's name, description, and price should be displayed
@@ -28,8 +32,8 @@ Feature: Product Page Functionality
     And The user clicks on the "Back to products" button
     Then The user should be redirected to the products page
     And The product's button should be updated to either "Add to cart" or "Remove" based on the previous action
-  Scenario: Use product sorting functionality as standard_user
-    Given The user is logged in as a "standard_user"
+  Scenario: Use product sorting functionality as problem_user
+    Given The user is logged in as a "problem_user"
     When The user clicks on the product sorting container
     And The user clicks on option A-Z
     Then The products should be sorted in ascending order by name
@@ -42,3 +46,5 @@ Feature: Product Page Functionality
     When The user clicks on the product sorting container
     And The user clicks on option High-Low
     Then The products should be sorted in descending order by price
+
+

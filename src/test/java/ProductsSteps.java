@@ -22,6 +22,8 @@ public class ProductsSteps {
     private ProductsPage productsPage = new ProductsPage(driver);
     private LoginPage loginPage = new LoginPage(driver);
 
+    private long sortStartTime;
+
     // Scenario: Add and Remove a product from cart as standard_user
     @When("The user adds a product to the cart")
     public void addToCart() {
@@ -218,49 +220,161 @@ public class ProductsSteps {
 
     @When("The user clicks on option A-Z")
     public void clickOnOptionAZ() {
+        sortStartTime = System.currentTimeMillis();
         productsPage.clickOnSortingOption("A-Z");
     }
 
     @Then("The products should be sorted in ascending order by name")
     public void checkSortingAZ() {
-        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Bike Light","0","Sauce Labs Bolt T-Shirt","1","Sauce Labs Onesie","2","Test.allTheThings() T-Shirt (Red)","3","Sauce Labs Fleece Jacket","5"));
-        assertEquals("Sauce Labs Backpack",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Backpack","1","Sauce Labs Bike Light","2","Sauce Labs Bolt T-Shirt","3","Sauce Labs Fleece Jacket","4","Sauce Labs Onesie","5","Test.allTheThings() T-Shirt (Red)","6"));
         for (String key : namesmap.keySet()) {
-            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
         }
     }
 
     @When("The user clicks on option Z-A")
     public void clickOnOptionZA() {
+        sortStartTime = System.currentTimeMillis();
         productsPage.clickOnSortingOption("Z-A");
     }
 
     @Then("The products should be sorted in descending order by name")
-    public void checkSortingDescending() {
-        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Onesie","0","Sauce Labs Fleece Jacket","1","Sauce Labs Bike Light","2","Sauce Labs Backpack","3","Sauce Labs Bolt T-Shirt","5"));
-        assertEquals("Test.allTheThings() T-Shirt (Red)",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+    public void checkSortingZA() {
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Test.allTheThings() T-Shirt (Red)","1","Sauce Labs Onesie","2","Sauce Labs Fleece Jacket","3","Sauce Labs Bolt T-Shirt","4","Sauce Labs Bike Light","5","Sauce Labs Backpack","6"));
         for (String key : namesmap.keySet()) {
-            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
         }
     }
 
     @When("The user clicks on option Low-High")
     public void clickOnOptionLowHigh() {
+        sortStartTime = System.currentTimeMillis();
         productsPage.clickOnSortingOption("Low-High");
     }
 
     @Then("The products should be sorted in ascending order by price")
-    public void checkSortingPriceAscending() {
-        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Bike Light","0","Sauce Labs Bolt T-Shirt","1","Sauce Labs Onesie","2","Test.allTheThings() T-Shirt (Red)","3","Sauce Labs Fleece Jacket","5"));
-        assertEquals("Sauce Labs Backpack",driver.findElement(By.cssSelector("*[data-test=\"inventory-item-name\"]")).getText());
+    public void checkSortingPriceLowHigh() {
+        // Hashmap that contains names starting with the name with lowest price
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Onesie","1","Sauce Labs Bike Light","2","Sauce Labs Bolt T-Shirt","3","Test.allTheThings() T-Shirt (Red)","4","Sauce Labs Backpack","5","Sauce Labs Fleece Jacket","6"));
         for (String key : namesmap.keySet()) {
-            assertEquals(key,driver.findElement(By.cssSelector("#item_" + namesmap.get(key) + "_title_link > .inventory_item_name")).getText());
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
         }
     }
 
     @When("The user clicks on option High-Low")
     public void clickOnOptionHighLow() {
+        sortStartTime = System.currentTimeMillis();
         productsPage.clickOnSortingOption("High-Low");
     }
 
+    @Then("The products should be sorted in descending order by price")
+    public void checkSortingPriceHighLow() {
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Fleece Jacket","1","Sauce Labs Backpack","2", "Sauce Labs Bolt T-Shirt","3","Test.allTheThings() T-Shirt (Red)","4","Sauce Labs Bike Light","5","Sauce Labs Onesie","6"));
+        for (String key : namesmap.keySet()) {
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
+        }
+    }
+
+    // ##### Problem User Additional methods #####
+
+    @When("The user adds every product to the cart")
+
+    public void addEveryProductToCart() {
+        ArrayList<String> products = new ArrayList<>(List.of("sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt", "sauce-labs-fleece-jacket", "sauce-labs-onesie", "test.allthethings()-t-shirt-(red)"));
+        for (String product : products) {
+            productsPage.clickAddButton(product);
+        }
+    }
+
+    @Then("The cart badge should show \"6\" and all buttons should change to \"Remove\"")
+
+    public void checkAllButtonsAndCartIs6() {
+        ArrayList<String> products = new ArrayList<>(List.of("sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt", "sauce-labs-fleece-jacket", "sauce-labs-onesie", "test.allthethings()-t-shirt-(red)"));
+        for (String product : products) {
+            {
+                List<WebElement> elements = driver.findElements(productsPage.removeButton(product));
+                assertTrue(elements.size() > 0,"There is no Remove button for product "+product);
+            }
+            assertEquals("Remove", productsPage.getRemoveButtonText(product), "The button must be \"Remove\"");
+        }
+        assertEquals("6", productsPage.getCartBadgeText(), "The cart badge must be \"6\"");
+    }
+
+    // ##### Performance Glitch User Additional methods #####
+
+    @Then("The products should be sorted in ascending order by name within 2 seconds")
+    public void checkSortingAZWTime() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.cssSelector(".inventory_item:nth-child(1) .inventory_item_description"),
+                "Sauce Labs Backpack"
+        ));
+
+        long sortEndTime = System.currentTimeMillis();
+        long totalSortTime = sortEndTime - sortStartTime;
+
+        assertTrue(totalSortTime <= 2000, "The sorting took longer than 2 seconds: " + totalSortTime + " ms");
+
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Backpack","1","Sauce Labs Bike Light","2","Sauce Labs Bolt T-Shirt","3","Sauce Labs Fleece Jacket","4","Sauce Labs Onesie","5","Test.allTheThings() T-Shirt (Red)","6"));
+        for (String key : namesmap.keySet()) {
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
+        }
+    }
+
+    @Then("The products should be sorted in descending order by name within 2 seconds")
+    public void checkSortingZATime() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.cssSelector(".inventory_item:nth-child(1) .inventory_item_description"),
+                "Test.allTheThings() T-Shirt (Red)"
+        ));
+
+        long sortEndTime = System.currentTimeMillis();
+        long totalSortTime = sortEndTime - sortStartTime;
+
+        assertTrue(totalSortTime <= 2000, "The sorting took longer than 2 seconds: " + totalSortTime + " ms");
+
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Test.allTheThings() T-Shirt (Red)","1","Sauce Labs Onesie","2","Sauce Labs Fleece Jacket","3","Sauce Labs Bolt T-Shirt","4","Sauce Labs Bike Light","5","Sauce Labs Backpack","6"));
+        for (String key : namesmap.keySet()) {
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
+        }
+    }
+
+    @Then("The products should be sorted in ascending order by price within 2 seconds")
+    public void checkSortingPriceTime() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.cssSelector(".inventory_item:nth-child(1) .inventory_item_description"),
+                "Sauce Labs Onesie"
+        ));
+
+        long sortEndTime = System.currentTimeMillis();
+        long totalSortTime = sortEndTime - sortStartTime;
+
+        assertTrue(totalSortTime <= 2000, "The sorting took longer than 2 seconds: " + totalSortTime + " ms");
+
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Onesie","1","Sauce Labs Bike Light","2","Sauce Labs Bolt T-Shirt","3","Test.allTheThings() T-Shirt (Red)","4","Sauce Labs Backpack","5","Sauce Labs Fleece Jacket","6"));
+        for (String key : namesmap.keySet()) {
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
+        }
+    }
+
+    @Then("The products should be sorted in descending order by price within 2 seconds")
+    public void checkSortingPriceHighLowTime() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.cssSelector(".inventory_item:nth-child(1) .inventory_item_description"),
+                "Sauce Labs Fleece Jacket"
+        ));
+
+        long sortEndTime = System.currentTimeMillis();
+        long totalSortTime = sortEndTime - sortStartTime;
+
+        assertTrue(totalSortTime <= 2000, "The sorting took longer than 2 seconds: " + totalSortTime + " ms");
+
+        HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Fleece Jacket","1","Sauce Labs Backpack","2", "Sauce Labs Bolt T-Shirt","3","Test.allTheThings() T-Shirt (Red)","4","Sauce Labs Bike Light","5","Sauce Labs Onesie","6"));
+        for (String key : namesmap.keySet()) {
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
+        }
+    }
 }
