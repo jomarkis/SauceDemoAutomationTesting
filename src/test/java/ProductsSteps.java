@@ -369,4 +369,6 @@ public class ProductsSteps {
             assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
         }
     }
+
+
 }
