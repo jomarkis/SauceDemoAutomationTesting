@@ -366,9 +366,9 @@ public class ProductsSteps {
 
         HashMap<String,String> namesmap = new HashMap<>( Map.of("Sauce Labs Fleece Jacket","1","Sauce Labs Backpack","2", "Sauce Labs Bolt T-Shirt","3","Test.allTheThings() T-Shirt (Red)","4","Sauce Labs Bike Light","5","Sauce Labs Onesie","6"));
         for (String key : namesmap.keySet()) {
-            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));
-        }
+            assertTrue(driver.findElement(By.cssSelector(".inventory_item:nth-child("+namesmap.get(key)+") > .inventory_item_description")).getText().contains(key));        }
     }
+
 
 
 }
