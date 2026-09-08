@@ -31,4 +31,6 @@ public class YourCartPage extends Page {
     public void clickCheckout() {
         driver.findElement(checkoutButton).click();
     }
+
+
 }
