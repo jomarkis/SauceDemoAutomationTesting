@@ -125,9 +125,6 @@ public class ProductsSteps {
     public void checkLoginPage() {
         List<WebElement> elements = driver.findElements(By.cssSelector("*[data-test=\"login-button\"]"));
         assertTrue(elements.size() > 0);
-        loginPage.enterUsername("standard_user");
-        loginPage.enterPassword("secret_sauce");
-        loginPage.clickLoginButton();
     }
 
     @When("The user clicks on \"Reset App State\"")

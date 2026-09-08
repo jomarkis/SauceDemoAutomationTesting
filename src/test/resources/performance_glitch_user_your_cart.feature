@@ -1,5 +1,5 @@
 Feature: Your Cart Functionality for performance_glitch_user
-  Scenario: Verify product in the cart, "Remove" and ""Continue Shopping" button functionality as performance_glitch_user
+  Scenario: Verify product in the cart, "Remove" and "Continue Shopping" button functionality as performance_glitch_user
     Given The user is logged in as a "performance_glitch_user"
     When The user adds a product to the cart
     And The user clicks on the cart icon
@@ -23,5 +23,9 @@ Feature: Your Cart Functionality for performance_glitch_user
     Then The user should be redirected to the Sauce LAB website
     When The user clicks on "Logout"
     Then The user should be logged out and redirected to the login page
-    When The user clicks on "Reset App State"
+    When The user enters username "performance_glitch_user" and password "secret_sauce"
+    And The user clicks the login button
+    And The user clicks on the cart icon
+    And The user clicks on "Reset App State"
+    And The user clicks on "All Items"
     Then The cart should be empty and all buttons should be reset to "Add to cart"

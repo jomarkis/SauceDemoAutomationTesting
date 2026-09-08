@@ -20,7 +20,9 @@ Feature: Product Page Functionality for problem_user
     Then The user should be redirected to the Sauce LAB website
     When The user clicks on "Logout"
     Then The user should be logged out and redirected to the login page
-    When The user clicks on "Reset App State"
+    When The user enters username "problem_user" and password "secret_sauce"
+    And The user clicks the login button
+    And The user clicks on "Reset App State"
     Then The cart should be empty and all buttons should be reset to "Add to cart"
   Scenario: Navigation to a product's details page as problem_user
     Given The user is logged in as a "problem_user"

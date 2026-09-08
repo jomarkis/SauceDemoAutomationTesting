@@ -55,14 +55,12 @@ public class LoginSteps {
     public void isTitleProducts(String expTitle) {
         String titleText = productsPage.getTitleText();
         assertEquals(expTitle,titleText,"The login page must be \"Products\"");
-        driver.quit();
     }
 
     @Then("An error message should be displayed with text {string}")
     public void isErrorMessage(String error) {
         String errorText = loginPage.getErrorMessage();
         assertEquals(error,errorText,"There must be an error message: "+error);
-        driver.quit();
     }
 
     @Then("The user should be redirected to the products page with title {string} within 2 seconds")
@@ -76,7 +74,6 @@ public class LoginSteps {
         String titleText = productsPage.getTitleText();
         assertEquals(expTitle,titleText,"Should be redirected to the products page with title: "+expTitle);
         assertTrue(totalTime <= 2000, "The redirection process took longer than 2 seconds: " + totalTime + " milliseconds");
-        driver.quit();
     }
 
     @Given("The user is logged in as a {string}")
