@@ -21,4 +21,8 @@ public class YourCartPage extends Page {
     public void clickRemoveButton(String product) {
         driver.findElement(removeButton(product)).click();
     }
+
+    public void clickContinueShopping() {
+        driver.findElement(continueShopping).click();
+    }
 }

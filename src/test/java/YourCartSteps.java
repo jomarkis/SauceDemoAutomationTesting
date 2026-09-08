@@ -43,4 +43,22 @@ public class YourCartSteps {
         }
         assertEquals("Remove",yourCartPage.getRemoveButtonText("sauce-labs-backpack"));
     }
+
+    @When("The user clicks on the \"Remove\" button for the product in the cart")
+    public void clicksOnRemoveButtonInCart() {
+        yourCartPage.clickRemoveButton("sauce-labs-backpack");
+    }
+
+    @Then("The product should be removed from the cart")
+    public void isProductRemovedFromCart() {
+        {
+            List<WebElement> elements = driver.findElements(yourCartPage.removeButton("sauce-labs-backpack"));
+            assert(elements.size() == 0);
+        }
+    }
+
+    @When("The user clicks on the \"Continue Shopping\" button")
+    public void clickContinueShopping() {
+        yourCartPage.clickContinueShopping();
+    }
 }
