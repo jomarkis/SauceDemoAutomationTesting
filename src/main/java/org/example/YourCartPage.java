@@ -10,6 +10,8 @@ public class YourCartPage extends Page {
 
     private By continueShopping = By.cssSelector("*[data-test=\"continue-shopping\"]");
 
+    private By checkoutButton = By.cssSelector("*[data-test=\"checkout\"]");
+
     public By removeButton(String product) {
         return By.cssSelector("*[data-test=\"remove-" + product + "\"]");
     }
@@ -24,5 +26,9 @@ public class YourCartPage extends Page {
 
     public void clickContinueShopping() {
         driver.findElement(continueShopping).click();
+    }
+
+    public void clickCheckout() {
+        driver.findElement(checkoutButton).click();
     }
 }
