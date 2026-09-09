@@ -1,3 +1,5 @@
+@regression
+@smoke
 Feature: Login Functionality
 
   Scenario: Successful login with standard user

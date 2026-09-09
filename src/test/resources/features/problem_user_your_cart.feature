@@ -1,3 +1,4 @@
+@regression
 Feature: Your Cart Functionality for problem_user
   Scenario: Verify product in the cart, "Remove" and "Continue Shopping" button functionality as problem_user
     Given The user is logged in as a "problem_user"

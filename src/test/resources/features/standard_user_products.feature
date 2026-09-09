@@ -1,3 +1,5 @@
+@smoke
+@regression  
 Feature: Product Page Functionality for standard_user
   Scenario: Add and Remove a product from cart as standard_user
     Given The user is logged in as a "standard_user"

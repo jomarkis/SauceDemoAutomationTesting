@@ -1,3 +1,4 @@
+@regression
 Feature: Product Page Functionality for performance_glitch_user
   Scenario: Add and Remove a product from cart as performance_glitch_user
     Given The user is logged in as a "performance_glitch_user"

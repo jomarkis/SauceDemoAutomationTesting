@@ -1,3 +1,4 @@
+@regression
 Feature: Product Page Functionality for problem_user
   Scenario: Add and Remove a product from cart as problem_user
     Given The user is logged in as a "problem_user"

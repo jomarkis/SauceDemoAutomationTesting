@@ -1,3 +1,5 @@
+@checkout
+@regression
 Feature: Checkout Complete Functionality across users
   Scenario Outline: Verify the checkout complete page and "Back Home" button functionality as "<username>"
     Given The user is logged in as a "<username>"

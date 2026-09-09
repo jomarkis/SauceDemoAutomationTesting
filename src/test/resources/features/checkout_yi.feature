@@ -1,3 +1,5 @@
+@checkout
+@regression
 Feature: Checkout Your Information Functionality across users
 
   Scenario Outline: Verify the checkout your information page and "Continue" button functionality as "<username>"

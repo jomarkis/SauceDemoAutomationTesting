@@ -1,3 +1,4 @@
+@regression
 Feature: Your Cart Functionality for performance_glitch_user
   Scenario: Verify product in the cart, "Remove" and "Continue Shopping" button functionality as performance_glitch_user
     Given The user is logged in as a "performance_glitch_user"
