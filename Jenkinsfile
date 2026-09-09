@@ -7,12 +7,21 @@ pipeline {
     }
 
     stages {
-        stage('Run Automated Tests') {
-            steps {
-                bat 'mvn clean test -Dheadless=true'
+            stage('Run Automated Tests') {
+                steps {
+                    script {
+                        def cmd = "mvn clean test -Dheadless=true -Dbrowser=%BROWSER%"
+
+                        def selectedTag = env.CUCUMBER_TAGS
+                        if (selectedTag != null && !selectedTag.contains("All tests") && selectedTag.trim() != "") {
+                            cmd += " -Dcucumber.filter.tags=\"${selectedTag}\""
+                        }
+
+                        bat cmd
+                    }
+                }
             }
         }
-    }
 
     post {
         always {
