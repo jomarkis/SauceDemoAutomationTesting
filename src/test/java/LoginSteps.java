@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -29,12 +30,19 @@ public class LoginSteps {
     @Given("The user opens the SauceDemo website in Firefox")
     public void openWebsite() {
         if (driver == null) {
-            driver = new FirefoxDriver();
+            FirefoxOptions options = new FirefoxOptions();
+
+            // Ελέγχουμε αν από το τερματικό/Jenkins ζητήθηκε headless mode
+            String isHeadless = System.getProperty("headless", "false");
+            if (Boolean.parseBoolean(isHeadless)) {
+                options.addArguments("-headless"); // Τρέξε αόρατα
+            }
+
+            driver = new FirefoxDriver(options);
             driver.manage().window().setSize(new Dimension(1513, 831));
         }
-        
-        driver.get("https://www.saucedemo.com/");
 
+        driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
     }
