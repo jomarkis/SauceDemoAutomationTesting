@@ -1,13 +1,11 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
-        }
+    tools {
+        maven 'Maven 3.8'
+    }
 
+    stages {
         stage('Run Automated Tests') {
             steps {
                 bat 'mvn clean test -Dheadless=true'
