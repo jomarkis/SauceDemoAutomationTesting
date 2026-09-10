@@ -72,10 +72,6 @@ Run specific test tags (e.g., `@smoke`, `@regression`, `@checkout`):
 mvn test -Dcucumber.filter.tags="@smoke"
 ```
 
-> **Note:** If `mvn` is not configured in your system's PATH, you can use the Maven Wrapper:
-> * **Windows:** `.\mvnw.cmd clean test`
-> * **Linux / macOS:** `./mvnw clean test`
-
 ---
 
 #### Option 2: Via IDE (IntelliJ IDEA / Eclipse)
@@ -128,7 +124,7 @@ mvn test -Dcucumber.filter.tags="@smoke"
 
 * **Επιλογές Tags**: `@smoke`, `@regression`, `@checkout` ή πλήρης εκτέλεση όλων των σεναρίων.
 
-* Μπορείτε να ελέγξετε τη διαμόρφωση παραμετροποιημένης έκδοσης Jenkins από τα στιγμιότυπα οθόνης στον φάκελο **screenshots**.
+* Μπορείτε να δείτε τη διαμόρφωση του Parameterized Build στο Jenkins από τα σχετικά στιγμιότυπα στον φάκελο **screenshots**.
 
 
 ---
@@ -161,10 +157,6 @@ mvn clean test
 ```bash
 mvn test -Dcucumber.filter.tags="@smoke"
 ```
-
-> **Σημείωση:** Εάν το `mvn` δεν είναι δηλωμένο στο PATH του συστήματος, μπορείτε να χρησιμοποιήσετε τον Maven Wrapper:
-> * **Windows:** `.\mvnw.cmd clean test`
-> * **Linux / macOS:** `./mvnw clean test`
 
 ---
 
